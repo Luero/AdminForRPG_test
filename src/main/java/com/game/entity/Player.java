@@ -1,11 +1,13 @@
 package com.game.entity;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table(name ="player")
 public class Player {
 
+    @Id
     private long id;
     private String name;
     private String title;
@@ -26,6 +28,10 @@ public class Player {
         this.race = race;
         this.profession = profession;
         this.birthday = birthday;
+    }
+
+    public Player() {
+
     }
 
     public long getId() {
