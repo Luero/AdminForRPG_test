@@ -20,20 +20,9 @@ public class Player {
     private Boolean banned = false;
 
     public Player(String name, String title, Race race, Profession profession, Date birthday) {
-        if (name.length() > 0 && name.length() <= 12)
-        {
-            this.name = name;
-        } else {
-            System.out.println("Name length should be less or equal to 12 charachters.");
-        }
 
-        if (title.length() > 0 && title.length() <= 30)
-        {
+        this.name = name;
         this.title = title;
-        } else {
-            System.out.println("Title length should be less or equal to 30 charachters.");
-        }
-
         this.race = race;
         this.profession = profession;
         this.birthday = birthday;
