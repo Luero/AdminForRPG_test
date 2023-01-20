@@ -34,7 +34,7 @@ public class Player {
     @Column(name = "banned")
     private Boolean banned = false;
 
-    public Player(String name, String title, Race race, Profession profession, Date birthday) {
+    public Player(String name, String title, Race race, Profession profession, Date birthday, Integer experience) {
 
         this.id = id;
         this.name = name;
@@ -42,11 +42,10 @@ public class Player {
         this.race = race;
         this.profession = profession;
         this.birthday = birthday;
+        this.experience = experience;
     }
 
-    public Player() {
-
-    }
+    public Player() {    }
 
     public long getId() {
         return id;
