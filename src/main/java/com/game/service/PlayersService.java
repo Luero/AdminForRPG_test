@@ -42,7 +42,7 @@ public class PlayersService {
             if (profession != null && !player.getProfession().equals(profession)) return;
             if(after != null && player.getBirthday().before(dateAfter)) return;
             if(before != null && player.getBirthday().after(dateBefore)) return;
-            if(banned != null && !player.getBanned() != banned) return;
+            if(banned != null && player.getBanned() != banned) return;
             if(minExperience != null && player.getExperience() < minExperience) return;
             if(maxExperience != null && player.getExperience() > maxExperience) return;
             if(minLevel != null && player.getLevel() < minLevel) return;
@@ -66,8 +66,8 @@ public class PlayersService {
                 case EXPERIENCE:
                     return player1.getExperience().compareTo(player2.getExperience());
                 default:
-                    Long player1ID = valueOf(player1.getId());
-                    Long player2ID = valueOf(player2.getId());
+                    Long player1ID = player1.getId();
+                    Long player2ID = player2.getId();
                     return player1ID.compareTo(player2ID);
                 }
         });
