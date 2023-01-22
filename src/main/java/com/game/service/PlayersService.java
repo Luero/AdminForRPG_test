@@ -114,6 +114,7 @@ public class PlayersService {
             return false;
         }
         else if (player.getBirthday().before(new Date(0))) return false;
+        else if (player.getExperience() > 10000000) return false;
         else return true;
 
     }
@@ -168,9 +169,10 @@ public class PlayersService {
             toBeUpdated.setExperience(updatedPlayer.getExperience());
         }
 
-        Integer level = countPlayersLevel(toBeUpdated.getExperience());
-        toBeUpdated.setLevel(level);
-        toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(toBeUpdated.getExperience(), level));
+            Integer level = countPlayersLevel(toBeUpdated.getExperience());
+            toBeUpdated.setLevel(level);
+            toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(toBeUpdated.getExperience(), level));
+
 
         return playersRepository.save(toBeUpdated);
     }

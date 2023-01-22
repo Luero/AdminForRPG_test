@@ -97,7 +97,7 @@ public class Player {
     }
 
     public void setExperience(Integer experience) {
-        if(experience >= 0 && experience <= 10_000_000) {this.experience = experience;}
+        if(experience >= 0 && experience <= 10000000) {this.experience = experience;}
         else this.experience = null;
     }
 

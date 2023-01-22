@@ -45,10 +45,14 @@ public class PlayersController {
                                                                      @RequestParam(value = "maxLevel", required = false) Integer maxLevel,
                                                                      @RequestParam(value = "order", required = false) PlayerOrder order,
                                                                      @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
-                                                                     @RequestParam(value = "pageSizw", required = false) Integer pageSize) {
+                                                                     @RequestParam(value = "pageSize", required = false) Integer pageSize) {
 
         final List<Player> players = playersService.getPlayers(name, title, race, profession, after, before, banned, minExperience,
                 maxExperience, minLevel, maxLevel);
+        if(order == null)
+        {
+            order = PlayerOrder.ID;
+        }
 
         final List<Player> sortedPlayers = playersService.sortPlayers(players, order);
 
@@ -127,7 +131,7 @@ public class PlayersController {
         }
     }
 
-    @DeleteMapping("/players/{id]")
+    @DeleteMapping("/players/{id}")
     public ResponseEntity<Player> deletePlayer(@PathVariable(value = "id") String inputId)
     {
         Long id = playersService.scanID(inputId);
