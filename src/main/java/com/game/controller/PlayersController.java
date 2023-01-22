@@ -2,6 +2,7 @@ package com.game.controller;
 
 import com.game.entity.Profession;
 import com.game.entity.Race;
+import com.game.repository.PlayersRepository;
 import com.game.service.PlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +22,13 @@ import java.util.Optional;
 public class PlayersController {
 
     private final PlayersService playersService;
+    private final PlayersRepository playersRepository;
 
     @Autowired
-    public PlayersController(PlayersService playersService) {
+    public PlayersController(PlayersService playersService,
+                             PlayersRepository playersRepository) {
         this.playersService = playersService;
+        this.playersRepository = playersRepository;
     }
 
     @RequestMapping(path = "/players", method = RequestMethod.GET)
@@ -98,6 +102,53 @@ public class PlayersController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<Player>(player, HttpStatus.OK);
+    }
+
+    @PostMapping("/players/{id}")
+    public @ResponseBody ResponseEntity<Player> updatePlayer(@PathVariable(value = "id") String inputId,
+                                                             @RequestBody Player player)
+    {
+        Long id = playersService.scanID(inputId);
+
+        if(id == null || id <= 0)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Player toBeUpdated = getPlayer(inputId).getBody();
+
+        if(toBeUpdated == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+            return new ResponseEntity<>(playersService.updatePlayer(id, player), HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/players/{id]")
+    public ResponseEntity<Player> deletePlayer(@PathVariable(value = "id") String inputId)
+    {
+        Long id = playersService.scanID(inputId);
+
+        if(id == null || id <= 0)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Player toBeDeleted = getPlayer(inputId).getBody();
+
+        if(toBeDeleted == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+        {
+            playersService.deletePlayer(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
     }
 
 

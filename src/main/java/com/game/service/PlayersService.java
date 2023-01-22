@@ -135,21 +135,49 @@ public class PlayersService {
     }
 
     //Update player
-    public void updatePlayer(long id, Player updatedPlayer) {
-        updatedPlayer.setId(id);
+    public Player updatePlayer(long id, Player updatedPlayer) {
 
-        Integer level = countPlayersLevel(updatedPlayer.getExperience());
-        updatedPlayer.setLevel(level);
-        updatedPlayer.setUntilNextLevel(countExperienceUntilNextLevel(updatedPlayer.getExperience(), level));
+        Player toBeUpdated = playersRepository.findById(id).orElse(null);
 
-        playersRepository.save(updatedPlayer);
+        if(updatedPlayer.getName() != null)
+        {
+            toBeUpdated.setName(updatedPlayer.getName());
+        }
+        if(updatedPlayer.getTitle() != null)
+        {
+            toBeUpdated.setTitle(updatedPlayer.getTitle());
+        }
+        if(updatedPlayer.getRace() != null)
+        {
+            toBeUpdated.setRace(updatedPlayer.getRace());
+        }
+        if(updatedPlayer.getProfession() != null)
+        {
+            toBeUpdated.setProfession(updatedPlayer.getProfession());
+        }
+        if(updatedPlayer.getBirthday() != null)
+        {
+            toBeUpdated.setBirthday(updatedPlayer.getBirthday());
+        }
+        if(updatedPlayer.getBanned() != null)
+        {
+            toBeUpdated.setBanned(updatedPlayer.getBanned());
+        }
+        if(updatedPlayer.getExperience() != null)
+        {
+            toBeUpdated.setExperience(updatedPlayer.getExperience());
+        }
 
+        Integer level = countPlayersLevel(toBeUpdated.getExperience());
+        toBeUpdated.setLevel(level);
+        toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(toBeUpdated.getExperience(), level));
+
+        return playersRepository.save(toBeUpdated);
     }
 
     //Delete player
     public void deletePlayer(long id) {
         playersRepository.deleteById(id);
-
     }
 
     private Integer countPlayersLevel(Integer experience) {
