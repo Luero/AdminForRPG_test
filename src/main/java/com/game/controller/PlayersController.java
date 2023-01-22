@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.game.entity.Player;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest")
@@ -49,10 +51,53 @@ public class PlayersController {
         return playersService.getPages(sortedPlayers, pageNumber,pageSize);
     }
 
+    @RequestMapping(path = "/players/count", method = RequestMethod.GET)
+    public Integer countPlayers(@RequestParam(value = "name", required = false) String name,
+                                     @RequestParam(value = "title", required = false) String title,
+                                     @RequestParam(value = "race", required = false) Race race,
+                                     @RequestParam(value = "profession", required = false) Profession profession,
+                                     @RequestParam(value = "after", required = false) Long after,
+                                     @RequestParam(value = "before", required = false) Long before,
+                                     @RequestParam(value = "banned", required = false) Boolean banned,
+                                     @RequestParam(value = "minExperience", required = false) Integer minExperience,
+                                     @RequestParam(value = "maxExperience", required = false) Integer maxExperience,
+                                     @RequestParam(value = "minLevel", required = false) Integer minLevel,
+                                     @RequestParam(value = "maxLevel", required = false) Integer maxLevel)
+    {
+        return playersService.getPlayers(name, title, race, profession, after, before, banned, minExperience,
+                maxExperience, minLevel, maxLevel).size();
+    }
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<Player> createPlayer (@RequestBody Player player)
+    {
+        if(!playersService.isPlayerValid(player))
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else {
+            final Player newPlayer = playersService.createPlayer(player);
+            return new ResponseEntity<>(newPlayer, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/players/{id}")
-    public @ResponseBody ResponseEntity<Player> getPlayer (@PathVariable long id) {
-        //Test without validation
-        return new ResponseEntity<Player>(playersService.getPlayer(id), HttpStatus.OK);
+    public @ResponseBody ResponseEntity<Player> getPlayer(@PathVariable(value = "id") String inputId) {
+
+        Long id = playersService.scanID(inputId);
+
+        if(id == null || id <= 0)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Player player = playersService.getPlayer(id);
+
+        if(player == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<Player>(player, HttpStatus.OK);
     }
 
 

@@ -1,8 +1,11 @@
 package com.game.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -37,12 +40,12 @@ public class Player {
     public Player(String name, String title, Race race, Profession profession, Date birthday, Integer experience) {
 
         this.id = id;
-        this.name = name;
-        this.title = title;
+        this.setName(name);
+        this.setTitle(title);
         this.race = race;
         this.profession = profession;
         this.birthday = birthday;
-        this.experience = experience;
+        this.setExperience(experience);
     }
 
     public Player() {    }
@@ -60,7 +63,8 @@ public class Player {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if(name.length() > 0 && name.length() <= 12)     { this.name = name; }
+        else this.name = null;
     }
 
     public String getTitle() {
@@ -68,7 +72,8 @@ public class Player {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        if(title.length() <= 30) { this.title = title;}
+        else this.name = null;
     }
 
     public Race getRace() {
@@ -92,7 +97,8 @@ public class Player {
     }
 
     public void setExperience(Integer experience) {
-        this.experience = experience;
+        if(experience >= 0 && experience <= 10_000_000) {this.experience = experience;}
+        else this.experience = null;
     }
 
     public Integer getLevel() {
@@ -116,7 +122,14 @@ public class Player {
     }
 
     public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(birthday);
+
+        if(calendar.get(Calendar.YEAR) >= 2000 && calendar.get(Calendar.YEAR) <= 3000) {
+            this.birthday = birthday;
+        }
+        else
+            this.birthday = null;
     }
 
     public Boolean getBanned() {

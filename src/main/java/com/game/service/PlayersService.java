@@ -95,33 +95,43 @@ public class PlayersService {
         return players.subList(fromPage, toPage);
     }
 
-    //Get players count
-    public Integer playersCount() {
-        List<Player> allPlayers = playersRepository.findAll();
-
-        //TODO
-
-        return null;
-    }
-
     //Create player
-    public void createPlayer() {
-        Player player = new Player();
+    public Player createPlayer(Player player) {
 
-        //TODO
-        //parametres, validation
+        if (player.getBanned() == null) {player.setBanned(false);};
 
         Integer level = countPlayersLevel(player.getExperience());
         player.setLevel(level);
         player.setUntilNextLevel(countExperienceUntilNextLevel(player.getExperience(), level));
 
+        return playersRepository.save(player);
+    }
 
-        playersRepository.save(player);
+    public Boolean isPlayerValid(Player player)
+    {
+        if (player.getName() == null || player.getTitle() == null || player.getRace() == null || player.getProfession() == null || player.getBirthday() == null || player.getExperience() == null)
+        {
+            return false;
+        }
+        else if (player.getBirthday().before(new Date(0))) return false;
+        else return true;
+
     }
 
     //Get a player by id
     public Player getPlayer(long id) {
         return playersRepository.findById(id).orElse(null);
+    }
+
+    public Long scanID (String inputId) {
+        Long id = null;
+        try {
+            id = Long.parseLong(inputId);
+        } catch (Exception e)
+        {
+            id = null;
+        }
+        return id;
     }
 
     //Update player
