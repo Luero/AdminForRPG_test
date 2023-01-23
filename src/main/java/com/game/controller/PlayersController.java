@@ -134,20 +134,18 @@ public class PlayersController {
             }
         }
 
-        Player toBeUpdated = getPlayer(inputId).getBody();
-
-        if(toBeUpdated == null)
+        if ((Long)player.getId() == null && player.getName() == null && player.getTitle() == null && player.getRace() == null && player.getProfession() == null && player.getBirthday() == null && player.getBanned() == null && player.getExperience() == null && player.getLevel() == null && player.getUntilNextLevel() == null)
         {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(playersService.getPlayer(id), HttpStatus.OK);
         }
+        else {
+            Player toBeUpdated = getPlayer(inputId).getBody();
 
-        else if (player.getName() == null && player.getTitle() == null && player.getRace() == null && player.getProfession() == null && player.getBirthday() == null && player.getBanned() == null && player.getExperience() == null)
-        {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-        else
-        {
-            return new ResponseEntity<>(playersService.updatePlayer(id, player), HttpStatus.OK);
+            if (toBeUpdated == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(playersService.updatePlayer(toBeUpdated, player), HttpStatus.OK);
+            }
         }
     }
 

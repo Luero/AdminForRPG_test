@@ -1,6 +1,7 @@
 package com.game.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.springframework.validation.annotation.Validated;
 
@@ -17,24 +18,31 @@ public class Player {
     @Column(name = "id")
     private long id;
     @Column(name = "name")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String name;
     @Column(name = "title")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
     @Column(name = "race")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Enumerated(EnumType.STRING)
     private Race race;
     @Column(name = "profession")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Enumerated(EnumType.STRING)
     private Profession profession;
     @Column(name = "experience")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer experience;
     @Column(name = "level")
     private Integer level;
     @Column(name = "untilNextLevel")
     private Integer untilNextLevel;
     @Column(name = "birthday")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date birthday;
     @Column(name = "banned")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Boolean banned = false;
 
     public Player(String name, String title, Race race, Profession profession, Date birthday, Integer experience) {

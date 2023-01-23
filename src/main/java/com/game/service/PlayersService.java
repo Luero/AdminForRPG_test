@@ -137,12 +137,7 @@ public class PlayersService {
     }
 
     //Update player
-    public Player updatePlayer(long id, Player updatedPlayer) {
-
-        Player toBeUpdated = playersRepository.findById(id).orElse(null);
-        Long originalId = toBeUpdated.getId();
-        Integer originalLevel = toBeUpdated.getLevel();
-        Integer originalUntilNextLvl = toBeUpdated.getUntilNextLevel();
+    public Player updatePlayer(Player toBeUpdated, Player updatedPlayer) {
 
         if(updatedPlayer.getName() != null)
         {
@@ -168,25 +163,11 @@ public class PlayersService {
         {
             toBeUpdated.setBanned(updatedPlayer.getBanned());
         }
-        if(updatedPlayer.getExperience() != null && updatedPlayer.getExperience() > 0 && updatedPlayer.getExperience() <= 10000000)
+        if(updatedPlayer.getExperience() != null)
         {
             toBeUpdated.setExperience(updatedPlayer.getExperience());
             toBeUpdated.setLevel(countPlayersLevel(updatedPlayer.getExperience()));
             toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(updatedPlayer.getExperience(), countPlayersLevel(updatedPlayer.getExperience())));
-        } else
-        {
-            Integer level = countPlayersLevel(toBeUpdated.getExperience());
-            toBeUpdated.setLevel(level);
-            toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(toBeUpdated.getExperience(), level));
-        }
-        if((Long) updatedPlayer.getId() != null)
-        {
-            toBeUpdated.setId(originalId);
-        }
-        if(updatedPlayer.getLevel() != null || updatedPlayer.getUntilNextLevel() != null) {
-            Integer level = countPlayersLevel(toBeUpdated.getExperience());
-            toBeUpdated.setLevel(level);
-            toBeUpdated.setUntilNextLevel(countExperienceUntilNextLevel(toBeUpdated.getExperience(), level));
         }
 
         return playersRepository.save(toBeUpdated);
@@ -199,7 +180,7 @@ public class PlayersService {
 
     private Integer countPlayersLevel(Integer experience) {
         double techValue = ((Math.sqrt(2500 + 200 * experience)) - 50)/100;
-        return (int) Math.round(techValue);
+        return (int) Math.floor(techValue);
     }
 
     private Integer countExperienceUntilNextLevel(Integer experience, Integer level)
