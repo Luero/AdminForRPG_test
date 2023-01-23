@@ -97,7 +97,7 @@ public class Player {
     }
 
     public void setExperience(Integer experience) {
-        if(experience >= 0 && experience <= 10000000) {this.experience = experience;}
+        if(experience > 0 || experience <= 10000000) {this.experience = experience;}
         else this.experience = null;
     }
 
@@ -125,7 +125,7 @@ public class Player {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(birthday);
 
-        if(calendar.get(Calendar.YEAR) >= 2000 && calendar.get(Calendar.YEAR) <= 3000) {
+        if(calendar.get(Calendar.YEAR) >= 2000 || calendar.get(Calendar.YEAR) <= 3000) {
             this.birthday = birthday;
         }
         else

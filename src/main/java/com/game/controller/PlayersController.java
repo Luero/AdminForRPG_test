@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.game.entity.Player;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,12 +119,31 @@ public class PlayersController {
         {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if(player.getExperience() != null) {
+            if (player.getExperience() <= 0 || player.getExperience() > 10000000) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+        if(player.getBirthday() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(player.getBirthday());
+
+            if(calendar.get(Calendar.YEAR) < 2000 || calendar.get(Calendar.YEAR) > 3000)
+            {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Player toBeUpdated = getPlayer(inputId).getBody();
 
         if(toBeUpdated == null)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        else if (player.getName() == null && player.getTitle() == null && player.getRace() == null && player.getProfession() == null && player.getBirthday() == null && player.getBanned() == null && player.getExperience() == null)
+        {
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         else
         {
